@@ -463,7 +463,7 @@ void Estimator::processMeasurements()
                     std::this_thread::sleep_for(dura);
                 }
             }
-            while(1)
+            while(true)
             {
                 if ((!USE_WHEEL  || WheelAvailable(feature.first + td - td_wheel)))
                     break;
@@ -733,7 +733,7 @@ void Estimator::processImage(const map<int, vector<pair<int, Eigen::Matrix<doubl
             }
         }
     }
-
+    // Vuong: We do initialization here
     if (solver_flag == INITIAL)
     {
         // monocular + IMU initilization
@@ -2190,7 +2190,7 @@ void Estimator::fastPredictIMU(double t, Eigen::Vector3d linear_acceleration, Ei
     latest_time = t;
     //latest_P, latest_Q, latest_V的初值将会在视觉初始化中从updateLatestStates()中获得
     Eigen::Vector3d un_acc_0 = latest_Q * (latest_acc_0 - latest_Ba) - g;
-    Eigen::Vector3d un_gyr = 0.5 * (latest_gyr_0 + angular_velocity) - latest_Bg;
+    Eigen::Vector3d un_gyr = 0.5 * ( latest_gyr_0 + angular_velocity) - latest_Bg;
     latest_Q = latest_Q * Utility::deltaQ(un_gyr * dt);
     Eigen::Vector3d un_acc_1 = latest_Q * (linear_acceleration - latest_Ba) - g;
     Eigen::Vector3d un_acc = 0.5 * (un_acc_0 + un_acc_1);
